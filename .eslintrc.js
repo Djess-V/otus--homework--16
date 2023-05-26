@@ -30,6 +30,13 @@ module.exports = {
     "no-undef": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "no-use-before-define": "off",
+    "no-console": "off",
+    "no-param-reassign": "off",
+    "no-return-assign": "off",
+    "default-param-last": "off",
     "import/extensions": ["warn", { ts: "never" }],
   },
 };
