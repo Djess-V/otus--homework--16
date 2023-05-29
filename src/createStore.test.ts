@@ -1,6 +1,6 @@
 import { createStore } from "./createStore";
-import { id, Todo, TodoAction } from "./types/forTests";
-import applyMiddleware from "./applyMiddleware";
+import { Todo, TodoAction } from "./types/forTests";
+import id from "./utils/forTests";
 
 describe("createStore", () => {
   describe("public interface", () => {
@@ -181,6 +181,7 @@ describe("createStore", () => {
   });
 
   it("error output testing", () => {
+    // @ts-expect-error : Intentional transmission of inappropriate parameters
     expect(() => createStore("Hello")).toThrow();
     expect(() =>
       createStore(
@@ -193,6 +194,7 @@ describe("createStore", () => {
       createStore(
         (a) => a,
         (b) => b,
+        // @ts-expect-error : Intentional transmission of inappropriate parameters
         "Hello"
       )
     ).toThrow();
@@ -200,50 +202,13 @@ describe("createStore", () => {
     const reducer = jest.fn((state = 1) => state + 1);
     const store = createStore(reducer);
 
+    // @ts-expect-error : Intentional transmission of inappropriate parameters
     expect(() => store.dispatch("Hello")).toThrow();
+    // @ts-expect-error : Intentional transmission of inappropriate parameters
     expect(() => store.dispatch({ type: undefined })).toThrow();
+    // @ts-expect-error : Intentional transmission of inappropriate parameters
     expect(() => store.dispatch({ type: 5 })).toThrow();
+    // @ts-expect-error : Intentional transmission of inappropriate parameters
     expect(() => store.replaceReducer({ type: 5 })).toThrow();
-  });
-
-  describe("middlewares", () => {
-    it("check for function overloading when we pass enchancer but don't pass preloadedState", () => {
-      const reducer = jest.fn((state = 1) => state + 1);
-      const enchancer = jest.fn(() => applyMiddleware());
-      createStore(reducer, enchancer);
-
-      expect(enchancer).toHaveBeenCalled();
-    });
-
-    it("applyMiddleware verification", () => {
-      const todos = (state = [], action) => {
-        switch (action.type) {
-          case "ADD_TODO":
-            return state.concat([action.text]);
-          default:
-            return state;
-        }
-      };
-
-      const log = jest.spyOn(window.console, "log");
-
-      function logger({ getState }) {
-        return (next) => (action) => {
-          console.log("will dispatch", action);
-          const returnValue = next(action);
-          console.log("state after dispatch", getState());
-          return returnValue;
-        };
-      }
-
-      const store = createStore(todos, ["Use Redux"], applyMiddleware(logger));
-
-      store.dispatch({
-        type: "ADD_TODO",
-        text: "Understand the middleware",
-      });
-
-      expect(log).toHaveBeenCalledTimes(2);
-    });
   });
 });

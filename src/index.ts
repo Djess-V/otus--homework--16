@@ -1,4 +1,5 @@
-import { createStore, Reducer } from "./createStore";
+import { createStore } from "./createStore";
+import { Reducer } from "./types/reducers";
 
 type State = {
   counter: number;
@@ -42,7 +43,7 @@ const reducer: Reducer<State, Action> = (state = { counter: 5 }, action) => {
   }
 };
 
-const store = createStore(reducer);
+const store = createStore(reducer, { counter: 5 });
 
 (document.getElementById("app") as HTMLElement).innerHTML = `
   <h1>Counter: ${store.getState()?.counter}</h1>

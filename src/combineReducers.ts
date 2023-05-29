@@ -52,7 +52,7 @@ export function combineReducers(reducers: {
     const key = reducerKeys[i];
 
     if (typeof reducers[key] === "undefined") {
-      console.error(`The reducer's name is equal to undefined`);
+      console.log(`The reducer's name is equal to undefined`);
     }
 
     if (typeof reducers[key] === "function") {
